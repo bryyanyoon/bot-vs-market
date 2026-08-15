@@ -271,4 +271,3 @@ const tb = document.querySelector("#datatable tbody");
 tb.innerHTML = DATA.map(d =>
   `<tr><td>${fmtD(d.date)}${d.dep ? " ▲" : ""}</td><td class="num">${pct(d.bot)}</td><td class="num">${pct(d.qqq)}</td><td class="num">${pct(d.spy)}</td></tr>`).join("");
 </script>
-<!-- test perturbation -->
