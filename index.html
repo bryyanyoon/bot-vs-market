@@ -1,0 +1,273 @@
+<title>Bot vs. Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bot vs. Market">
+<style>
+  :root {
+    --bg: #FAF9FB; --card: #FFFFFF; --ink: #1D1A26; --ink-2: #6B6577; --ink-3: #9892A6;
+    --hair: #E7E3EE; --grid: #EEEBF4;
+    --c-bot: #6D28D9; --c-qqq: #B45309; --c-spy: #0369A1;
+    --tip-bg: #1D1A26; --tip-ink: #F5F3F9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16151A; --card: #1D1B23; --ink: #EDEAF4; --ink-2: #9A93A8; --ink-3: #6E6880;
+      --hair: #2B2834; --grid: #232029;
+      --c-bot: #8B5CF6; --c-qqq: #C07A2C; --c-spy: #1CA3C9;
+      --tip-bg: #EDEAF4; --tip-ink: #1D1A26;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16151A; --card: #1D1B23; --ink: #EDEAF4; --ink-2: #9A93A8; --ink-3: #6E6880;
+    --hair: #2B2834; --grid: #232029;
+    --c-bot: #8B5CF6; --c-qqq: #C07A2C; --c-spy: #1CA3C9;
+    --tip-bg: #EDEAF4; --tip-ink: #1D1A26;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Avenir Next", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.55; -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent; padding-top: env(safe-area-inset-top);
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 34px 18px 64px; }
+  @media (min-width: 640px) { .wrap { padding: 48px 24px 72px; } }
+  .eyebrow { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 10px; }
+  h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.08; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+  .sub { color: var(--ink-2); margin: 0 0 28px; max-width: 60ch; font-size: 15px; }
+  .mono, .num { font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+  .hero { display: flex; flex-wrap: wrap; gap: 14px 40px; align-items: flex-end; margin-bottom: 30px; }
+  .hero .big .val { font-size: clamp(56px, 15vw, 84px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--c-bot); }
+  .hero .lab { font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 6px; display: flex; align-items: center; gap: 7px; }
+  .hero .small .val { font-size: clamp(24px, 7vw, 34px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+  .panel { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; padding: 16px 12px 8px; margin-bottom: 24px; }
+  @media (min-width: 640px) { .panel { padding: 22px 22px 14px; } }
+  .panel-head { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; align-items: baseline; margin: 0 6px 12px; }
+  .panel-title { font-size: 15px; font-weight: 600; margin: 0; }
+  .legend { display: flex; gap: 14px 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 15px; height: 0; border-top: 3px solid; border-radius: 2px; display: inline-block; }
+  .chartbox { position: relative; }
+  .chartbox svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
+  .tip { position: absolute; pointer-events: none; display: none; background: var(--tip-bg); color: var(--tip-ink); border-radius: 7px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,.18); white-space: nowrap; z-index: 3; }
+  .tip .d { font-weight: 600; margin-bottom: 2px; }
+  .tip .row { display: flex; align-items: center; gap: 6px; }
+  .tip .row b { margin-left: auto; padding-left: 14px; font-weight: 600; }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  @media (min-width: 640px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stat { background: var(--card); padding: 14px 16px; }
+  .stat .k { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 4px; }
+  .stat .v { font-size: 20px; font-weight: 650; letter-spacing: -0.01em; }
+  @media (min-width: 640px) { .stat .v { font-size: 22px; } }
+  .note { font-size: 13.5px; color: var(--ink-2); max-width: 74ch; margin: 0 0 24px; }
+  .note b { color: var(--ink); font-weight: 600; }
+  details { border: 1px solid var(--hair); border-radius: 12px; background: var(--card); }
+  summary { cursor: pointer; padding: 12px 18px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  summary:focus-visible { outline: 2px solid var(--c-bot); outline-offset: 2px; border-radius: 8px; }
+  .tblwrap { overflow-x: auto; padding: 0 18px 16px; }
+  table { border-collapse: collapse; font-size: 13px; width: 100%; min-width: 420px; }
+  th, td { text-align: right; padding: 5px 12px; border-bottom: 1px solid var(--hair); }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; }
+  th { color: var(--ink-2); font-weight: 600; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+  @media (prefers-reduced-motion: no-preference) { .tip { transition: transform .08s ease; } }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Autonomous trading bot &middot; Jul 6 &ndash; Aug 14, 2026</p>
+  <h1>Bot vs. Market</h1>
+  <p class="sub">Six weeks of a fully autonomous bot mirroring live trade alerts &mdash; measured against the Nasdaq&#8209;100 and the S&amp;P&nbsp;500 over the exact same window. Deposits are stripped out; this is performance only.</p>
+
+  <div class="hero">
+    <div class="big">
+      <div class="lab"><span class="dot" style="background:var(--c-bot)"></span>The bot</div>
+      <div class="val num">+21.5%</div>
+    </div>
+    <div class="small">
+      <div class="lab"><span class="dot" style="background:var(--c-spy)"></span>S&amp;P 500</div>
+      <div class="val num">+3.3%</div>
+    </div>
+    <div class="small">
+      <div class="lab"><span class="dot" style="background:var(--c-qqq)"></span>Nasdaq&#8209;100</div>
+      <div class="val num">+1.1%</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2 class="panel-title">Cumulative return since funding</h2>
+      <div class="legend">
+        <span><span class="swatch" style="border-color:var(--c-bot)"></span>Bot</span>
+        <span><span class="swatch" style="border-color:var(--c-spy)"></span>SPY&nbsp;(S&amp;P&nbsp;500)</span>
+        <span><span class="swatch" style="border-color:var(--c-qqq)"></span>QQQ&nbsp;(Nasdaq&#8209;100)</span>
+      </div>
+    </div>
+    <div class="chartbox" id="chartbox">
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Net profit</div><div class="v num">+$300.69</div></div>
+    <div class="stat"><div class="k">Capital deposited</div><div class="v num">$1,938.43</div></div>
+    <div class="stat"><div class="k">Worst drawdown</div><div class="v num">−5.1%</div></div>
+    <div class="stat"><div class="k">Trading days</div><div class="v num">30</div></div>
+  </div>
+
+  <p class="note"><b>How it&rsquo;s measured.</b> The bot line is a time&#8209;weighted return: mid&#8209;period deposits ($438 on Jul 27, $500 on Aug 10 &mdash; marked <span class="num">&#9650;</span> on the baseline) are excluded, so nothing counts as profit except actual trading gains. Benchmarks are QQQ and SPY closing prices indexed to Jul 6, the day the account was funded. Past performance, small account, one six&#8209;week window &mdash; you know the drill.</p>
+
+  <details>
+    <summary>Daily data</summary>
+    <div class="tblwrap"><table id="datatable">
+      <thead><tr><th>Date</th><th>Bot</th><th>QQQ</th><th>SPY</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </details>
+</div>
+
+<script>
+const DATA = [{"date":"2026-07-06","bot":0.0,"qqq":0.0,"spy":0.0},{"date":"2026-07-07","bot":0.11,"qqq":-1.85,"spy":-0.48},{"date":"2026-07-08","bot":-0.0,"qqq":-1.57,"spy":-0.78},{"date":"2026-07-09","bot":0.39,"qqq":0.06,"spy":0.06},{"date":"2026-07-10","bot":0.01,"qqq":0.37,"spy":0.49},{"date":"2026-07-13","bot":-0.96,"qqq":-1.53,"spy":-0.28},{"date":"2026-07-14","bot":-1.34,"qqq":-0.43,"spy":0.07},{"date":"2026-07-15","bot":-0.52,"qqq":-0.7,"spy":0.47},{"date":"2026-07-16","bot":-2.37,"qqq":-2.34,"spy":-0.07},{"date":"2026-07-17","bot":0.53,"qqq":-3.8,"spy":-1.06},{"date":"2026-07-20","bot":-0.07,"qqq":-3.7,"spy":-1.22},{"date":"2026-07-21","bot":6.1,"qqq":-1.92,"spy":-0.4},{"date":"2026-07-22","bot":6.32,"qqq":-2.42,"spy":-0.52},{"date":"2026-07-23","bot":4.52,"qqq":-4.27,"spy":-1.74},{"date":"2026-07-24","bot":1.75,"qqq":-5.34,"spy":-1.64},{"date":"2026-07-27","bot":3.16,"qqq":-5.63,"spy":-1.62,"dep":true},{"date":"2026-07-28","bot":0.88,"qqq":-6.55,"spy":-1.39},{"date":"2026-07-29","bot":2.13,"qqq":-8.45,"spy":-2.9},{"date":"2026-07-30","bot":4.75,"qqq":-5.43,"spy":-1.28},{"date":"2026-07-31","bot":5.69,"qqq":-4.82,"spy":-0.57},{"date":"2026-08-03","bot":14.21,"qqq":-3.15,"spy":0.85},{"date":"2026-08-04","bot":19.45,"qqq":0.14,"spy":2.67},{"date":"2026-08-05","bot":18.57,"qqq":-0.76,"spy":2.46},{"date":"2026-08-06","bot":19.78,"qqq":-1.13,"spy":2.3},{"date":"2026-08-07","bot":21.46,"qqq":0.03,"spy":2.93},{"date":"2026-08-10","bot":21.44,"qqq":-0.27,"spy":2.9,"dep":true},{"date":"2026-08-11","bot":21.11,"qqq":-0.6,"spy":2.57},{"date":"2026-08-12","bot":20.67,"qqq":0.12,"spy":2.82},{"date":"2026-08-13","bot":21.85,"qqq":1.28,"spy":3.54},{"date":"2026-08-14","bot":21.52,"qqq":1.14,"spy":3.34}];
+const TICKS_FULL = ["2026-07-06", "2026-07-13", "2026-07-20", "2026-07-27", "2026-08-03", "2026-08-10", "2026-08-14"];
+const TICKS_COMPACT = ["2026-07-06", "2026-07-20", "2026-08-03", "2026-08-14"];
+
+const SERIES = [
+  { key: "bot", name: "Bot",  color: "var(--c-bot)", w: 2.5 },
+  { key: "spy", name: "SPY",  color: "var(--c-spy)", w: 2 },
+  { key: "qqq", name: "QQQ",  color: "var(--c-qqq)", w: 2 }
+];
+
+const box = document.getElementById("chartbox");
+const tip = document.getElementById("tip");
+
+const vals = DATA.flatMap(d => [d.bot, d.qqq, d.spy]);
+const ymin = Math.floor(Math.min(...vals) / 5) * 5;
+const ymax = Math.ceil(Math.max(...vals) / 5) * 5;
+
+const fmtD = s => {
+  const [y, m, d] = s.split("-").map(Number);
+  return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m-1] + " " + d;
+};
+const pct = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(v === 0 ? 0 : 1) + "%";
+
+let geo = null;
+
+function draw() {
+  const cw = Math.max(300, box.clientWidth);
+  const compact = cw < 620;
+  const W = cw;
+  const H = Math.round(Math.min(420, Math.max(250, cw * (compact ? 0.82 : 0.46))));
+  const M = { top: 14, right: compact ? 16 : 96, bottom: 30, left: 42 };
+  const iw = W - M.left - M.right, ih = H - M.top - M.bottom;
+  const X = i => M.left + (i / (DATA.length - 1)) * iw;
+  const Y = v => M.top + (1 - (v - ymin) / (ymax - ymin)) * ih;
+  geo = { W, H, M, iw, ih, X, Y };
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Line chart of cumulative percent return: bot versus QQQ and SPY">`;
+
+  const ystep = compact ? 10 : 5;
+  for (let t = ymin; t <= ymax; t += 5) {
+    const y = Y(t), zero = t === 0;
+    svg += `<line x1="${M.left}" y1="${y}" x2="${W - M.right}" y2="${y}" stroke="${zero ? "var(--ink-3)" : "var(--grid)"}" stroke-width="1"/>`;
+    if (t % ystep === 0)
+      svg += `<text x="${M.left - 8}" y="${y + 4}" text-anchor="end" class="num" font-size="11" fill="var(--ink-3)">${t > 0 ? "+" + t : t}%</text>`;
+  }
+
+  const XT = compact ? TICKS_COMPACT : TICKS_FULL;
+  XT.forEach(dt => {
+    const i = DATA.findIndex(d => d.date === dt);
+    if (i < 0) return;
+    let anchor = "middle";
+    if (i === 0) anchor = "start";
+    if (i === DATA.length - 1) anchor = "end";
+    svg += `<text x="${X(i)}" y="${H - 8}" text-anchor="${anchor}" font-size="11" fill="var(--ink-3)">${fmtD(dt)}</text>`;
+  });
+
+  DATA.forEach((d, i) => {
+    if (!d.dep) return;
+    const x = X(i), y = Y(0);
+    svg += `<path d="M ${x-4.5} ${y+7} L ${x+4.5} ${y+7} L ${x} ${y+1} Z" fill="var(--ink-3)"/>`;
+  });
+
+  [...SERIES].reverse().forEach(s => {
+    const path = DATA.map((d, i) => (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(d[s.key]).toFixed(1)).join(" ");
+    svg += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="${s.w}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+
+  SERIES.forEach(s => {
+    const last = DATA[DATA.length - 1], x = X(DATA.length - 1), y = Y(last[s.key]);
+    svg += `<circle cx="${x}" cy="${y}" r="4" fill="${s.color}" stroke="var(--card)" stroke-width="2"/>`;
+  });
+
+  if (!compact) {
+    const lbl = SERIES.map(s => ({ s, y: Y(DATA[DATA.length - 1][s.key]), v: DATA[DATA.length - 1][s.key] }))
+      .sort((a, b) => a.y - b.y);
+    for (let i = 1; i < lbl.length; i++) if (lbl[i].y - lbl[i-1].y < 16) lbl[i].y = lbl[i-1].y + 16;
+    lbl.forEach(o => {
+      svg += `<text x="${W - M.right + 12}" y="${o.y + 4}" font-size="12.5" font-weight="600" fill="var(--ink)"><tspan fill="${o.s.color}">●</tspan> ${o.s.name} <tspan class="num">${pct(o.v)}</tspan></text>`;
+    });
+  }
+
+  svg += `<line id="xhair" x1="0" y1="${M.top}" x2="0" y2="${M.top + ih}" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="3 3" visibility="hidden"/>`;
+  SERIES.forEach(s => {
+    svg += `<circle id="hv-${s.key}" r="4.5" fill="${s.color}" stroke="var(--card)" stroke-width="2" visibility="hidden"/>`;
+  });
+  svg += `</svg>`;
+
+  const old = box.querySelector("svg");
+  if (old) old.remove();
+  box.insertAdjacentHTML("afterbegin", svg);
+  wireHover();
+}
+
+function wireHover() {
+  const svgEl = box.querySelector("svg");
+  const xhair = document.getElementById("xhair");
+  const hvDots = Object.fromEntries(SERIES.map(s => [s.key, document.getElementById("hv-" + s.key)]));
+
+  function showAt(i, clientX, clientY) {
+    const { X, Y } = geo;
+    const d = DATA[i], x = X(i);
+    xhair.setAttribute("x1", x); xhair.setAttribute("x2", x);
+    xhair.setAttribute("visibility", "visible");
+    SERIES.forEach(s => {
+      hvDots[s.key].setAttribute("cx", x);
+      hvDots[s.key].setAttribute("cy", Y(d[s.key]));
+      hvDots[s.key].setAttribute("visibility", "visible");
+    });
+    tip.innerHTML = `<div class="d">${fmtD(d.date)}</div>` + SERIES.map(s =>
+      `<div class="row"><span class="dot" style="background:${s.color};width:8px;height:8px"></span>${s.name}<b class="num">${pct(d[s.key])}</b></div>`).join("")
+      + (d.dep ? `<div class="row" style="opacity:.75">▲ deposit day (excluded)</div>` : "");
+    const r = box.getBoundingClientRect();
+    let tx = clientX - r.left + 14, ty = clientY - r.top - 10;
+    tip.style.display = "block";
+    const tw = tip.offsetWidth;
+    if (tx + tw > r.width - 4) tx = clientX - r.left - tw - 14;
+    tip.style.left = Math.max(2, tx) + "px"; tip.style.top = Math.max(2, ty) + "px";
+  }
+  function hide() {
+    tip.style.display = "none";
+    xhair.setAttribute("visibility", "hidden");
+    SERIES.forEach(s => hvDots[s.key].setAttribute("visibility", "hidden"));
+  }
+  svgEl.addEventListener("pointermove", e => {
+    const r = svgEl.getBoundingClientRect();
+    const { W, M, iw } = geo;
+    const px = (e.clientX - r.left) * (W / r.width);
+    if (px < M.left - 8 || px > W - M.right + 8) return hide();
+    const i = Math.round(((px - M.left) / iw) * (DATA.length - 1));
+    if (i < 0 || i > DATA.length - 1) return hide();
+    showAt(i, e.clientX, e.clientY);
+  });
+  svgEl.addEventListener("pointerleave", hide);
+}
+
+draw();
+let rt = null;
+addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
+
+const tb = document.querySelector("#datatable tbody");
+tb.innerHTML = DATA.map(d =>
+  `<tr><td>${fmtD(d.date)}${d.dep ? " ▲" : ""}</td><td class="num">${pct(d.bot)}</td><td class="num">${pct(d.qqq)}</td><td class="num">${pct(d.spy)}</td></tr>`).join("");
+</script>
