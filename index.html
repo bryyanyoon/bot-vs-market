@@ -9,6 +9,7 @@
     --hair: #E7E3EE; --grid: #EEEBF4;
     --c-bot: #6D28D9; --c-qqq: #B45309; --c-spy: #0369A1;
     --tip-bg: #1D1A26; --tip-ink: #F5F3F9;
+    --buy-ink: #116936; --buy-bg: #DCF3E4; --sell-ink: #A03038; --sell-bg: #FBE3E4;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -16,6 +17,7 @@
       --hair: #2B2834; --grid: #232029;
       --c-bot: #8B5CF6; --c-qqq: #C07A2C; --c-spy: #1CA3C9;
       --tip-bg: #EDEAF4; --tip-ink: #1D1A26;
+      --buy-ink: #6FCE96; --buy-bg: #1B3324; --sell-ink: #E8949A; --sell-bg: #3A2226;
     }
   }
   :root[data-theme="dark"] {
@@ -23,6 +25,7 @@
     --hair: #2B2834; --grid: #232029;
     --c-bot: #8B5CF6; --c-qqq: #C07A2C; --c-spy: #1CA3C9;
     --tip-bg: #EDEAF4; --tip-ink: #1D1A26;
+    --buy-ink: #6FCE96; --buy-bg: #1B3324; --sell-ink: #E8949A; --sell-bg: #3A2226;
   }
   * { box-sizing: border-box; }
   body {
@@ -55,6 +58,17 @@
   .tip .d { font-weight: 600; margin-bottom: 2px; }
   .tip .row { display: flex; align-items: center; gap: 6px; }
   .tip .row b { margin-left: auto; padding-left: 14px; font-weight: 600; }
+  .trades { display: flex; flex-direction: column; padding: 2px 6px 8px; }
+  .trade { display: grid; grid-template-columns: 52px 46px 52px 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 13px; }
+  .trade:last-child { border-bottom: none; }
+  .tdate { color: var(--ink-3); }
+  .tsym { font-weight: 650; }
+  .tdet { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tval { text-align: right; font-weight: 600; }
+  .pill { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; padding: 2px 7px; border-radius: 99px; text-align: center; }
+  .pill.buy { color: var(--buy-ink); background: var(--buy-bg); }
+  .pill.sell { color: var(--sell-ink); background: var(--sell-bg); }
+  @media (max-width: 480px) { .trade { grid-template-columns: 46px 42px 46px 1fr auto; gap: 7px; font-size: 12.5px; } }
   .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
   @media (min-width: 640px) { .stats { grid-template-columns: repeat(4, 1fr); } }
   .stat { background: var(--card); padding: 14px 16px; }
@@ -106,6 +120,23 @@
     </div>
     <div class="chartbox" id="chartbox">
       <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2 class="panel-title">Recent trades</h2>
+      <div class="legend"><span>last 8 broker fills</span></div>
+    </div>
+    <div class="trades">
+<div class="trade"><span class="tdate num">Aug 13</span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.17 sh @ $144.92</span><span class="tval num">$25</span></div>
+<div class="trade"><span class="tdate num">Aug 11</span><span class="pill buy">BUY</span><span class="tsym num">APP</span><span class="tdet num">0.83 sh @ $321.73</span><span class="tval num">$268</span></div>
+<div class="trade"><span class="tdate num">Aug 11</span><span class="pill sell">SELL</span><span class="tsym num">QCOM</span><span class="tdet num">0.67 sh @ $163.84</span><span class="tval num">$111</span></div>
+<div class="trade"><span class="tdate num">Aug 10</span><span class="pill sell">SELL</span><span class="tsym num">RKLB</span><span class="tdet num">0.32 sh @ $79.98</span><span class="tval num">$26</span></div>
+<div class="trade"><span class="tdate num">Aug 7</span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.23 sh @ $125.93</span><span class="tval num">$29</span></div>
+<div class="trade"><span class="tdate num">Aug 6</span><span class="pill buy">BUY</span><span class="tsym num">DUOL</span><span class="tdet num">0.91 sh @ $114.94</span><span class="tval num">$105</span></div>
+<div class="trade"><span class="tdate num">Aug 6</span><span class="pill sell">SELL</span><span class="tsym num">ASTS</span><span class="tdet num">2.05 sh @ $73.73</span><span class="tval num">$151</span></div>
+<div class="trade"><span class="tdate num">Aug 4</span><span class="pill sell">SELL</span><span class="tsym num">RKLB</span><span class="tdet num">0.43 sh @ $74.43</span><span class="tval num">$32</span></div>
     </div>
   </div>
 
