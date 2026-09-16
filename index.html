@@ -1,4 +1,6 @@
 <title>Bot vs. Market</title>
+<meta charset="utf-8">
+<meta name="dashboard-snapshot" content="2026-09-16T21:10:18.890114+00:00">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -62,6 +64,7 @@
   .trade { display: grid; grid-template-columns: 52px 46px 52px 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 13px; }
   .trade:last-child { border-bottom: none; }
   .tdate { color: var(--ink-3); }
+  .tdate small { display:block; font-size:9px; white-space:nowrap; }
   .tsym { font-weight: 650; }
   .tdet { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tval { text-align: right; font-weight: 600; }
@@ -87,12 +90,40 @@
   th { color: var(--ink-2); font-weight: 600; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; }
   tr:last-child td { border-bottom: none; }
   @media (prefers-reduced-motion: no-preference) { .tip { transition: transform .08s ease; } }
+  .freshness { font-size:13px; color:var(--ink-2); margin:0 0 24px; }
+  .freshness strong { color:var(--ink); }
+  button, select { font:inherit; color:var(--ink); background:var(--card); border:1px solid var(--hair); border-radius:8px; padding:9px 12px; min-height:44px; }
+  button { cursor:pointer; }
+  .stock-controls { display:flex; flex-wrap:wrap; gap:12px; padding:0 6px 16px; }
+  .stock-controls label { display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--ink-2); flex:1; min-width:120px; }
+  .stock-card { padding:16px 6px; border-top:1px solid var(--hair); }
+  .stock-head { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+  .stock-head h3 { margin:0; font-size:18px; }
+  .stock-head strong { font-size:22px; white-space:nowrap; }
+  .stock-status { display:block; font-size:11px; font-weight:400; color:var(--ink-2); }
+  .gain { color:var(--buy-ink); } .loss { color:var(--sell-ink); }
+  .stock-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:12px 0; }
+  .stock-metrics dt { font-size:11px; color:var(--ink-2); }
+  .stock-metrics dd { margin:0; font-size:13px; }
+  .stock-card details { border:0; } .stock-card summary { padding:8px 0; font-size:12px; }
+  [hidden] { display:none !important; }
+  #stock-empty { padding:0 6px 16px; color:var(--ink-2); }
+  @media (max-width:480px) { .trade { grid-template-columns:64px 42px 1fr auto; } .tdet { grid-column:3/5; grid-row:2; } .tdate { grid-row:1/3; } .pill { grid-row:1; } .tsym { grid-column:3; grid-row:1; } .tval { grid-column:4; grid-row:1; } }
 </style>
 
 <div class="wrap">
   <p class="eyebrow">Autonomous trading bot &middot; Jul 6 &ndash; Sep 15, 2026</p>
   <h1>Bot vs. Market</h1>
+  <div class="freshness"><strong>Account snapshot: Sep 16, 2026 at 4:10 PM CT</strong><br>Updates weekdays at 3:35 PM Central. Daily comparison through Sep 15; broker history can lag.<br><button id="refresh-page" type="button">Check for update</button> <span id="refresh-result" role="status"></span></div>
   <p class="sub">Ten weeks of a fully autonomous bot mirroring live trade alerts &mdash; measured against the Nasdaq&#8209;100 and the S&amp;P&nbsp;500 over the exact same window. Deposits are stripped out; this is performance only.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Account profit</div><div class="v num">+$371.41</div></div>
+    <div class="stat"><div class="k">Account value</div><div class="v num">$4,539.84</div></div>
+    <div class="stat"><div class="k">Net contributed</div><div class="v num">$4,168.43</div></div>
+    <div class="stat"><div class="k">Cash available</div><div class="v num">$1,797.78</div></div>
+  </div>
+  <p class="note">Account profit includes sold and still-held gains, broker fees and income. Discord subscription, AI and hosting costs are excluded. This is a daily snapshot, not streaming prices.</p>
 
   <div class="hero">
     <div class="big">
@@ -129,23 +160,78 @@
       <div class="legend"><span>last 8 broker fills</span></div>
     </div>
     <div class="trades">
-<div class="trade"><span class="tdate num">Sep 16</span><span class="pill buy">BUY</span><span class="tsym num">AAOI</span><span class="tdet num">5.51 sh @ $97.80</span><span class="tval num">$539</span></div>
-<div class="trade"><span class="tdate num">Sep 14</span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.51 sh @ $146.96</span><span class="tval num">$76</span></div>
-<div class="trade"><span class="tdate num">Sep 10</span><span class="pill sell">SELL</span><span class="tsym num">META</span><span class="tdet num">0.11 sh @ $657.42</span><span class="tval num">$72</span></div>
-<div class="trade"><span class="tdate num">Sep 8</span><span class="pill sell">SELL</span><span class="tsym num">DRAM</span><span class="tdet num">0.15 sh @ $61.44</span><span class="tval num">$9</span></div>
-<div class="trade"><span class="tdate num">Sep 8</span><span class="pill sell">SELL</span><span class="tsym num">VST</span><span class="tdet num">0.49 sh @ $153.73</span><span class="tval num">$75</span></div>
-<div class="trade"><span class="tdate num">Sep 8</span><span class="pill sell">SELL</span><span class="tsym num">IREN</span><span class="tdet num">1.62 sh @ $47.62</span><span class="tval num">$77</span></div>
-<div class="trade"><span class="tdate num">Sep 4</span><span class="pill buy">BUY</span><span class="tsym num">CRDO</span><span class="tdet num">3.19 sh @ $171.56</span><span class="tval num">$547</span></div>
-<div class="trade"><span class="tdate num">Sep 2</span><span class="pill sell">SELL</span><span class="tsym num">IREN</span><span class="tdet num">6.49 sh @ $39.46</span><span class="tval num">$256</span></div>
+<div class="trade"><span class="tdate num">Sep 16<small>8:30 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">AAOI</span><span class="tdet num">5.5111 sh @ $97.80</span><span class="tval num">$538.99</span></div>
+<div class="trade"><span class="tdate num">Sep 14<small>8:30 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.5138 sh @ $146.96</span><span class="tval num">$75.51</span></div>
+<div class="trade"><span class="tdate num">Sep 10<small>9:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">META</span><span class="tdet num">0.1102 sh @ $657.42</span><span class="tval num">$72.44</span></div>
+<div class="trade"><span class="tdate num">Sep 8<small>9:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DRAM</span><span class="tdet num">0.1495 sh @ $61.44</span><span class="tval num">$9.18</span></div>
+<div class="trade"><span class="tdate num">Sep 8<small>9:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">VST</span><span class="tdet num">0.4863 sh @ $153.73</span><span class="tval num">$74.76</span></div>
+<div class="trade"><span class="tdate num">Sep 8<small>9:19 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">IREN</span><span class="tdet num">1.6213 sh @ $47.62</span><span class="tval num">$77.21</span></div>
+<div class="trade"><span class="tdate num">Sep 4<small>9:39 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">CRDO</span><span class="tdet num">3.1867 sh @ $171.56</span><span class="tval num">$546.72</span></div>
+<div class="trade"><span class="tdate num">Sep 2<small>2:31 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">IREN</span><span class="tdet num">6.4852 sh @ $39.46</span><span class="tval num">$255.93</span></div>
     </div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="k">Net profit</div><div class="v num">+$332.00</div></div>
-    <div class="stat"><div class="k">Capital deposited</div><div class="v num">$4,168.43</div></div>
-    <div class="stat"><div class="k">Worst drawdown</div><div class="v num">−5.1%</div></div>
-    <div class="stat"><div class="k">Trading days</div><div class="v num">51</div></div>
+  <div class="panel" id="stock-profits">
+    <div class="panel-head"><h2 class="panel-title">Profit by stock</h2><span class="legend">15 stocks &middot; lifetime trading</span></div>
+    <div class="stock-controls">
+      <label>Stock<select id="stock-select"><option value="all">All stocks</option><option value="AAOI">AAOI</option><option value="APP">APP</option><option value="ASTS">ASTS</option><option value="CRDO">CRDO</option><option value="CRWV">CRWV</option><option value="DRAM">DRAM</option><option value="DUOL">DUOL</option><option value="GOOGL">GOOGL</option><option value="IREN">IREN</option><option value="META">META</option><option value="ORCL">ORCL</option><option value="QCOM">QCOM</option><option value="RKLB">RKLB</option><option value="TSLA">TSLA</option><option value="VST">VST</option></select></label>
+      <label>Holdings<select id="holding-select"><option value="all">All holdings</option><option value="held">Currently held</option><option value="closed">Closed positions</option></select></label>
+    </div>
+    <p class="note">Total = realized profit on sold shares + profit on shares still held. The realized split uses the broker&rsquo;s remaining cost basis. Includes earlier trades in reopened stocks; excludes dividends, fees and external costs. Not a tax report.</p>
+    <div id="stock-list"><article class="stock-card" data-symbol="AAOI" data-status="held"><div class="stock-head"><h3>AAOI <span class="stock-status">Currently held</span></h3><strong class="num gain">+$94.32</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$94.26</dd></div><div><dt>Still held</dt><dd class="num">+$0.06</dd></div><div><dt>Position value</dt><dd class="num">$539.05</dd></div><div><dt>Shares</dt><dd class="num">5.511145</dd></div><div><dt>Average cost</dt><dd class="num">$97.80</dd></div><div><dt>Broker price</dt><dd class="num">$97.81</dd></div></dl><details><summary>Trade history (8 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 16<small>8:30 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">AAOI</span><span class="tdet num">5.5111 sh @ $97.80</span><span class="tval num">$538.99</span></div>
+<div class="trade"><span class="tdate num">Aug 4<small>1:00 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">AAOI</span><span class="tdet num">0.4725 sh @ $134.66</span><span class="tval num">$63.62</span></div>
+<div class="trade"><span class="tdate num">Aug 4<small>9:29 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">AAOI</span><span class="tdet num">0.4725 sh @ $128.70</span><span class="tval num">$60.81</span></div>
+<div class="trade"><span class="tdate num">Aug 3<small>2:59 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">AAOI</span><span class="tdet num">0.945 sh @ $110.24</span><span class="tval num">$104.17</span></div>
+<div class="trade"><span class="tdate num">Jul 29<small>11:00 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">AAOI</span><span class="tdet num">1.0269 sh @ $79.84</span><span class="tval num">$81.99</span></div>
+<div class="trade"><span class="tdate num">Jul 27<small>10:59 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">AAOI</span><span class="tdet num">0.8631 sh @ $95.00</span><span class="tval num">$81.99</span></div>
+<div class="trade"><span class="tdate num">Jul 21<small>12:19 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">AAOI</span><span class="tdet num">1.1896 sh @ $119.05</span><span class="tval num">$141.62</span></div>
+<div class="trade"><span class="tdate num">Jul 17<small>8:35 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">AAOI</span><span class="tdet num">1.1896 sh @ $94.14</span><span class="tval num">$111.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="CRWV" data-status="closed"><div class="stock-head"><h3>CRWV <span class="stock-status">Closed</span></h3><strong class="num gain">+$78.57</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$78.57</dd></div><div><dt>Still held</dt><dd class="num">+$0.00</dd></div><div><dt>Position value</dt><dd class="num">$0.00</dd></div></dl><details><summary>Trade history (4 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 4<small>1:00 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">CRWV</span><span class="tdet num">1.4754 sh @ $94.15</span><span class="tval num">$138.91</span></div>
+<div class="trade"><span class="tdate num">Aug 4<small>9:29 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">CRWV</span><span class="tdet num">1.4754 sh @ $90.58</span><span class="tval num">$133.64</span></div>
+<div class="trade"><span class="tdate num">Jul 29<small>11:00 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">CRWV</span><span class="tdet num">1.3336 sh @ $61.48</span><span class="tval num">$81.99</span></div>
+<div class="trade"><span class="tdate num">Jul 17<small>8:35 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">CRWV</span><span class="tdet num">1.6172 sh @ $69.25</span><span class="tval num">$111.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="META" data-status="held"><div class="stock-head"><h3>META <span class="stock-status">Currently held</span></h3><strong class="num gain">+$66.64</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$26.52</dd></div><div><dt>Still held</dt><dd class="num">+$40.12</dd></div><div><dt>Position value</dt><dd class="num">$222.94</dd></div><div><dt>Shares</dt><dd class="num">0.330586</dd></div><div><dt>Average cost</dt><dd class="num">$553.02</dd></div><div><dt>Broker price</dt><dd class="num">$674.38</dd></div></dl><details><summary>Trade history (5 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 10<small>9:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">META</span><span class="tdet num">0.1102 sh @ $657.42</span><span class="tval num">$72.44</span></div>
+<div class="trade"><span class="tdate num">Sep 2<small>9:19 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">META</span><span class="tdet num">0.1469 sh @ $593.84</span><span class="tval num">$87.25</span></div>
+<div class="trade"><span class="tdate num">Aug 18<small>11:20 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">META</span><span class="tdet num">0.4839 sh @ $553.02</span><span class="tval num">$267.62</span></div>
+<div class="trade"><span class="tdate num">Aug 3<small>9:09 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">META</span><span class="tdet num">0.1038 sh @ $593.63</span><span class="tval num">$61.61</span></div>
+<div class="trade"><span class="tdate num">Jul 30<small>11:49 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">META</span><span class="tdet num">0.2076 sh @ $529.91</span><span class="tval num">$109.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="IREN" data-status="held"><div class="stock-head"><h3>IREN <span class="stock-status">Currently held</span></h3><strong class="num gain">+$49.85</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$45.77</dd></div><div><dt>Still held</dt><dd class="num">+$4.08</dd></div><div><dt>Position value</dt><dd class="num">$23.23</dd></div><div><dt>Shares</dt><dd class="num">0.540431</dd></div><div><dt>Average cost</dt><dd class="num">$35.45</dd></div><div><dt>Broker price</dt><dd class="num">$42.99</dd></div></dl><details><summary>Trade history (3 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 8<small>9:19 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">IREN</span><span class="tdet num">1.6213 sh @ $47.62</span><span class="tval num">$77.21</span></div>
+<div class="trade"><span class="tdate num">Sep 2<small>2:31 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">IREN</span><span class="tdet num">6.4852 sh @ $39.46</span><span class="tval num">$255.93</span></div>
+<div class="trade"><span class="tdate num">Aug 28<small>2:41 PM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">IREN</span><span class="tdet num">8.6469 sh @ $35.45</span><span class="tval num">$306.52</span></div></div></details></article>
+<article class="stock-card" data-symbol="ASTS" data-status="held"><div class="stock-head"><h3>ASTS <span class="stock-status">Currently held</span></h3><strong class="num gain">+$30.85</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$38.82</dd></div><div><dt>Still held</dt><dd class="num">−$7.98</dd></div><div><dt>Position value</dt><dd class="num">$258.71</dd></div><div><dt>Shares</dt><dd class="num">4.358392</dd></div><div><dt>Average cost</dt><dd class="num">$61.19</dd></div><div><dt>Broker price</dt><dd class="num">$59.36</dd></div></dl><details><summary>Trade history (3 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 25<small>9:19 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">ASTS</span><span class="tdet num">4.3584 sh @ $61.19</span><span class="tval num">$266.69</span></div>
+<div class="trade"><span class="tdate num">Aug 6<small>9:29 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">ASTS</span><span class="tdet num">2.0456 sh @ $73.73</span><span class="tval num">$150.81</span></div>
+<div class="trade"><span class="tdate num">Jul 16<small>2:39 PM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">ASTS</span><span class="tdet num">2.0456 sh @ $54.75</span><span class="tval num">$111.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="DUOL" data-status="closed"><div class="stock-head"><h3>DUOL <span class="stock-status">Closed</span></h3><strong class="num gain">+$24.09</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$24.09</dd></div><div><dt>Still held</dt><dd class="num">+$0.00</dd></div><div><dt>Position value</dt><dd class="num">$0.00</dd></div></dl><details><summary>Trade history (4 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 14<small>8:30 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.5138 sh @ $146.96</span><span class="tval num">$75.51</span></div>
+<div class="trade"><span class="tdate num">Aug 13<small>2:19 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.1713 sh @ $144.92</span><span class="tval num">$24.82</span></div>
+<div class="trade"><span class="tdate num">Aug 7<small>8:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DUOL</span><span class="tdet num">0.2284 sh @ $125.93</span><span class="tval num">$28.76</span></div>
+<div class="trade"><span class="tdate num">Aug 6<small>9:29 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">DUOL</span><span class="tdet num">0.9134 sh @ $114.94</span><span class="tval num">$104.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="GOOGL" data-status="closed"><div class="stock-head"><h3>GOOGL <span class="stock-status">Closed</span></h3><strong class="num gain">+$13.56</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$13.56</dd></div><div><dt>Still held</dt><dd class="num">+$0.00</dd></div><div><dt>Position value</dt><dd class="num">$0.00</dd></div></dl><details><summary>Trade history (3 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 24<small>9:09 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">GOOGL</span><span class="tdet num">0.1721 sh @ $347.63</span><span class="tval num">$59.83</span></div>
+<div class="trade"><span class="tdate num">Aug 3<small>9:09 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">GOOGL</span><span class="tdet num">0.1721 sh @ $370.26</span><span class="tval num">$63.72</span></div>
+<div class="trade"><span class="tdate num">Jul 23<small>12:39 PM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">GOOGL</span><span class="tdet num">0.3442 sh @ $319.54</span><span class="tval num">$109.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="VST" data-status="held"><div class="stock-head"><h3>VST <span class="stock-status">Currently held</span></h3><strong class="num gain">+$12.90</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$8.10</dd></div><div><dt>Still held</dt><dd class="num">+$4.81</dd></div><div><dt>Position value</dt><dd class="num">$204.78</dd></div><div><dt>Shares</dt><dd class="num">1.458844</dd></div><div><dt>Average cost</dt><dd class="num">$137.08</dd></div><div><dt>Broker price</dt><dd class="num">$140.37</dd></div></dl><details><summary>Trade history (2 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 8<small>9:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">VST</span><span class="tdet num">0.4863 sh @ $153.73</span><span class="tval num">$74.76</span></div>
+<div class="trade"><span class="tdate num">Aug 21<small>11:09 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">VST</span><span class="tdet num">1.9451 sh @ $137.08</span><span class="tval num">$266.63</span></div></div></details></article>
+<article class="stock-card" data-symbol="DRAM" data-status="held"><div class="stock-head"><h3>DRAM <span class="stock-status">Currently held</span></h3><strong class="num gain">+$11.41</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$9.53</dd></div><div><dt>Still held</dt><dd class="num">+$1.88</dd></div><div><dt>Position value</dt><dd class="num">$24.93</dd></div><div><dt>Shares</dt><dd class="num">0.448388</dd></div><div><dt>Average cost</dt><dd class="num">$51.43</dd></div><div><dt>Broker price</dt><dd class="num">$55.61</dd></div></dl><details><summary>Trade history (6 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 8<small>9:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DRAM</span><span class="tdet num">0.1495 sh @ $61.44</span><span class="tval num">$9.18</span></div>
+<div class="trade"><span class="tdate num">Aug 17<small>12:19 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DRAM</span><span class="tdet num">0.1993 sh @ $61.21</span><span class="tval num">$12.20</span></div>
+<div class="trade"><span class="tdate num">Jul 30<small>10:59 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DRAM</span><span class="tdet num">0.7971 sh @ $51.06</span><span class="tval num">$40.70</span></div>
+<div class="trade"><span class="tdate num">Jul 27<small>10:59 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">DRAM</span><span class="tdet num">1.5943 sh @ $51.43</span><span class="tval num">$81.99</span></div>
+<div class="trade"><span class="tdate num">Jul 21<small>12:19 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">DRAM</span><span class="tdet num">2.0099 sh @ $58.89</span><span class="tval num">$118.37</span></div>
+<div class="trade"><span class="tdate num">Jul 15<small>11:19 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">DRAM</span><span class="tdet num">2.0099 sh @ $55.72</span><span class="tval num">$111.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="TSLA" data-status="closed"><div class="stock-head"><h3>TSLA <span class="stock-status">Closed</span></h3><strong class="num gain">+$10.08</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$10.08</dd></div><div><dt>Still held</dt><dd class="num">+$0.00</dd></div><div><dt>Position value</dt><dd class="num">$0.00</dd></div></dl><details><summary>Trade history (2 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 19<small>8:29 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">TSLA</span><span class="tdet num">0.2718 sh @ $338.78</span><span class="tval num">$92.07</span></div>
+<div class="trade"><span class="tdate num">Jul 29<small>11:00 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">TSLA</span><span class="tdet num">0.2718 sh @ $301.70</span><span class="tval num">$81.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="APP" data-status="held"><div class="stock-head"><h3>APP <span class="stock-status">Currently held</span></h3><strong class="num gain">+$4.03</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$0.00</dd></div><div><dt>Still held</dt><dd class="num">+$4.03</dd></div><div><dt>Position value</dt><dd class="num">$271.92</dd></div><div><dt>Shares</dt><dd class="num">0.832655</dd></div><div><dt>Average cost</dt><dd class="num">$321.73</dd></div><div><dt>Broker price</dt><dd class="num">$326.57</dd></div></dl><details><summary>Trade history (1 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 11<small>11:59 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">APP</span><span class="tdet num">0.8327 sh @ $321.73</span><span class="tval num">$267.89</span></div></div></details></article>
+<article class="stock-card" data-symbol="RKLB" data-status="held"><div class="stock-head"><h3>RKLB <span class="stock-status">Currently held</span></h3><strong class="num gain">+$2.06</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$9.89</dd></div><div><dt>Still held</dt><dd class="num">−$7.83</dd></div><div><dt>Position value</dt><dd class="num">$677.05</dd></div><div><dt>Shares</dt><dd class="num">10.654418</dd></div><div><dt>Average cost</dt><dd class="num">$64.28</dd></div><div><dt>Broker price</dt><dd class="num">$63.55</dd></div></dl><details><summary>Trade history (4 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 28<small>2:41 PM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">RKLB</span><span class="tdet num">9.6832 sh @ $64.34</span><span class="tval num">$623.02</span></div>
+<div class="trade"><span class="tdate num">Aug 10<small>2:49 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">RKLB</span><span class="tdet num">0.3237 sh @ $79.98</span><span class="tval num">$25.89</span></div>
+<div class="trade"><span class="tdate num">Aug 4<small>2:50 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">RKLB</span><span class="tdet num">0.4316 sh @ $74.43</span><span class="tval num">$32.12</span></div>
+<div class="trade"><span class="tdate num">Jul 24<small>2:10 PM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">RKLB</span><span class="tdet num">1.7265 sh @ $63.71</span><span class="tval num">$109.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="ORCL" data-status="closed"><div class="stock-head"><h3>ORCL <span class="stock-status">Closed</span></h3><strong class="num gain">+$1.79</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$1.79</dd></div><div><dt>Still held</dt><dd class="num">+$0.00</dd></div><div><dt>Position value</dt><dd class="num">$0.00</dd></div></dl><details><summary>Trade history (3 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 24<small>2:59 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">ORCL</span><span class="tdet num">0.5337 sh @ $142.38</span><span class="tval num">$75.99</span></div>
+<div class="trade"><span class="tdate num">Aug 3<small>2:59 PM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">ORCL</span><span class="tdet num">0.5337 sh @ $142.02</span><span class="tval num">$75.80</span></div>
+<div class="trade"><span class="tdate num">Jul 7<small>11:49 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">ORCL</span><span class="tdet num">1.0674 sh @ $140.52</span><span class="tval num">$149.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="QCOM" data-status="closed"><div class="stock-head"><h3>QCOM <span class="stock-status">Closed</span></h3><strong class="num loss">−$1.42</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">−$1.42</dd></div><div><dt>Still held</dt><dd class="num">+$0.00</dd></div><div><dt>Position value</dt><dd class="num">$0.00</dd></div></dl><details><summary>Trade history (2 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Aug 11<small>9:09 AM CT</small></span><span class="pill sell">SELL</span><span class="tsym num">QCOM</span><span class="tdet num">0.6749 sh @ $163.84</span><span class="tval num">$110.57</span></div>
+<div class="trade"><span class="tdate num">Jul 17<small>8:35 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">QCOM</span><span class="tdet num">0.6749 sh @ $165.93</span><span class="tval num">$111.99</span></div></div></details></article>
+<article class="stock-card" data-symbol="CRDO" data-status="held"><div class="stock-head"><h3>CRDO <span class="stock-status">Currently held</span></h3><strong class="num loss">−$27.28</strong></div><dl class="stock-metrics"><div><dt>Realized</dt><dd class="num">+$0.00</dd></div><div><dt>Still held</dt><dd class="num">−$27.28</dd></div><div><dt>Position value</dt><dd class="num">$519.43</dd></div><div><dt>Shares</dt><dd class="num">3.186681</dd></div><div><dt>Average cost</dt><dd class="num">$171.56</dd></div><div><dt>Broker price</dt><dd class="num">$163.00</dd></div></dl><details><summary>Trade history (1 orders)</summary><div class="trades"><div class="trade"><span class="tdate num">Sep 4<small>9:39 AM CT</small></span><span class="pill buy">BUY</span><span class="tsym num">CRDO</span><span class="tdet num">3.1867 sh @ $171.56</span><span class="tval num">$546.72</span></div></div></details></article></div>
+    <p id="stock-empty" hidden>No stocks match these filters.</p>
   </div>
+  <p class="note">Daily comparison: 51 trading days; worst drawdown −5.1%.</p>
 
   <p class="note"><b>How it&rsquo;s measured.</b> The bot line is a time&#8209;weighted return: mid&#8209;period deposits ($438 on Jul 27, $500 on Aug 10, $2,230 on Aug 28 &mdash; marked <span class="num">&#9650;</span> on the baseline) are excluded, so nothing counts as profit except actual trading gains. Benchmarks are QQQ and SPY closing prices indexed to Jul 6, the day the account was funded. Past performance, small account, one ten&#8209;week window &mdash; you know the drill.</p>
 
@@ -162,6 +248,43 @@
 const DATA = [{"date":"2026-07-06","bot":0.0,"qqq":0.0,"spy":0.0},{"date":"2026-07-07","bot":0.11,"qqq":-1.85,"spy":-0.48},{"date":"2026-07-08","bot":-0.0,"qqq":-1.57,"spy":-0.78},{"date":"2026-07-09","bot":0.39,"qqq":0.06,"spy":0.06},{"date":"2026-07-10","bot":0.01,"qqq":0.37,"spy":0.49},{"date":"2026-07-13","bot":-0.96,"qqq":-1.53,"spy":-0.28},{"date":"2026-07-14","bot":-1.34,"qqq":-0.43,"spy":0.07},{"date":"2026-07-15","bot":-0.52,"qqq":-0.7,"spy":0.47},{"date":"2026-07-16","bot":-2.37,"qqq":-2.34,"spy":-0.07},{"date":"2026-07-17","bot":0.53,"qqq":-3.8,"spy":-1.06},{"date":"2026-07-20","bot":-0.07,"qqq":-3.7,"spy":-1.22},{"date":"2026-07-21","bot":6.1,"qqq":-1.92,"spy":-0.4},{"date":"2026-07-22","bot":6.32,"qqq":-2.42,"spy":-0.52},{"date":"2026-07-23","bot":4.52,"qqq":-4.27,"spy":-1.74},{"date":"2026-07-24","bot":1.75,"qqq":-5.34,"spy":-1.64},{"date":"2026-07-27","bot":3.16,"qqq":-5.63,"spy":-1.62,"dep":true},{"date":"2026-07-28","bot":0.88,"qqq":-6.55,"spy":-1.39},{"date":"2026-07-29","bot":2.13,"qqq":-8.45,"spy":-2.9},{"date":"2026-07-30","bot":4.75,"qqq":-5.43,"spy":-1.28},{"date":"2026-07-31","bot":5.69,"qqq":-4.82,"spy":-0.57},{"date":"2026-08-03","bot":14.21,"qqq":-3.15,"spy":0.85},{"date":"2026-08-04","bot":19.45,"qqq":0.14,"spy":2.67},{"date":"2026-08-05","bot":18.57,"qqq":-0.76,"spy":2.46},{"date":"2026-08-06","bot":19.78,"qqq":-1.13,"spy":2.3},{"date":"2026-08-07","bot":21.46,"qqq":0.03,"spy":2.93},{"date":"2026-08-10","bot":21.44,"qqq":-0.27,"spy":2.9,"dep":true},{"date":"2026-08-11","bot":21.11,"qqq":-0.6,"spy":2.57},{"date":"2026-08-12","bot":20.67,"qqq":0.12,"spy":2.82},{"date":"2026-08-13","bot":21.85,"qqq":1.28,"spy":3.54},{"date":"2026-08-14","bot":21.52,"qqq":1.14,"spy":3.34},{"date":"2026-08-17","bot":21.24,"qqq":0.98,"spy":2.85},{"date":"2026-08-18","bot":20.43,"qqq":-0.73,"spy":2.15},{"date":"2026-08-19","bot":20.73,"qqq":-0.93,"spy":2.37},{"date":"2026-08-20","bot":20.5,"qqq":-1.64,"spy":1.51},{"date":"2026-08-21","bot":20.53,"qqq":-1.3,"spy":1.92},{"date":"2026-08-24","bot":20.02,"qqq":-2.28,"spy":1.62},{"date":"2026-08-25","bot":21.43,"qqq":-1.67,"spy":1.95},{"date":"2026-08-26","bot":20.94,"qqq":-1.58,"spy":1.97},{"date":"2026-08-27","bot":21.47,"qqq":-0.24,"spy":2.64},{"date":"2026-08-28","bot":21.13,"qqq":-0.88,"spy":2.41,"dep":true},{"date":"2026-08-31","bot":21.37,"qqq":-0.84,"spy":2.1},{"date":"2026-09-01","bot":20.76,"qqq":-2.1,"spy":1.4},{"date":"2026-09-02","bot":23.02,"qqq":-1.88,"spy":1.85},{"date":"2026-09-03","bot":23.45,"qqq":-0.71,"spy":2.91},{"date":"2026-09-04","bot":24.2,"qqq":-0.53,"spy":2.52},{"date":"2026-09-08","bot":24.86,"qqq":-0.62,"spy":1.95},{"date":"2026-09-09","bot":23.81,"qqq":-0.9,"spy":1.48},{"date":"2026-09-10","bot":22.53,"qqq":-1.95,"spy":0.87},{"date":"2026-09-11","bot":23.33,"qqq":-1.1,"spy":1.73},{"date":"2026-09-14","bot":22.19,"qqq":-1.89,"spy":1.28},{"date":"2026-09-15","bot":22.35,"qqq":-2.53,"spy":0.81}];
 const TICKS_FULL = ["2026-07-06", "2026-07-13", "2026-07-20", "2026-07-27", "2026-08-03", "2026-08-10", "2026-08-17", "2026-08-24", "2026-08-31", "2026-09-08", "2026-09-14", "2026-09-15"];
 const TICKS_COMPACT = ["2026-07-06", "2026-07-20", "2026-08-03", "2026-08-17", "2026-08-31", "2026-09-14", "2026-09-15"];
+
+const stockSelect = document.getElementById('stock-select');
+const holdingSelect = document.getElementById('holding-select');
+function filterStocks() {
+  let shown = 0;
+  document.querySelectorAll('.stock-card').forEach(card => {
+    card.hidden = (stockSelect.value !== 'all' && card.dataset.symbol !== stockSelect.value)
+      || (holdingSelect.value !== 'all' && card.dataset.status !== holdingSelect.value);
+    if (!card.hidden) shown++;
+  });
+  document.getElementById('stock-empty').hidden = shown > 0;
+}
+stockSelect.addEventListener('change', filterStocks);
+holdingSelect.addEventListener('change', filterStocks);
+let checking = false;
+async function checkUpdate(manual = false) {
+  if (checking) return;
+  checking = true;
+  const status = document.getElementById('refresh-result');
+  if (manual) status.textContent = 'Checking...';
+  try {
+    const url = new URL(location.href); url.searchParams.set('refresh', Date.now());
+    const response = await fetch(url, { cache:'no-store' });
+    if (!response.ok) throw new Error('unavailable');
+    const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+    const next = page.querySelector('meta[name="dashboard-snapshot"]');
+    if (!next) throw new Error('invalid page');
+    if (next.content !== document.querySelector('meta[name="dashboard-snapshot"]').content) {
+      location.replace(url.href); return;
+    }
+    if (manual) status.textContent = 'You have the latest published snapshot.';
+  } catch (_) { if (manual) status.textContent = 'Could not check. Showing the saved snapshot.'; }
+  finally { checking = false; }
+}
+document.getElementById('refresh-page').addEventListener('click', () => checkUpdate(true));
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); });
+setInterval(() => { if (!document.hidden) checkUpdate(); }, 300000);
 
 const SERIES = [
   { key: "bot", name: "Bot",  color: "var(--c-bot)", w: 2.5 },
